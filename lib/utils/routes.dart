@@ -10,6 +10,8 @@ import 'package:relevans_app/view/alabanza/alabanza_view.dart';
 import 'package:relevans_app/view/event/event_view.dart';
 import 'package:relevans_app/view/music_player/music_player_view.dart';
 import 'package:relevans_app/view/playlist/playlist_view.dart';
+import 'package:relevans_app/view/register/login_register.dart';
+import 'package:relevans_app/view/register/signup.dart';
 import 'package:relevans_app/view/register/user_register_view.dart';
 
 import 'ConstanstAplication.dart';
@@ -47,10 +49,12 @@ class _RoutesState extends State<Routes> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Relevans App',
-      initialRoute: "/",
+      title: 'ChurchIA App',
+      initialRoute: "/login",
       routes: {
         "/": (context) => HomeView(),
+        "/login": (context) => LoginWidget(),
+        "/signup": (context) => SignUpForm(),
         "/user_register": (context) => UserRegisterView(),
         "/more_activities": (context) => MoreActivitiesView(),
         "/alabanza": (context) => AlabanzaView(),

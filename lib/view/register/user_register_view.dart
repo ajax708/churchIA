@@ -15,7 +15,7 @@ class _UserRegisterViewState extends State<UserRegisterView> {
     // TODO: implement build
     return Scaffold(
         body: Stack(
-      children: [Fondo(), Contenido()],
+        children: [Fondo(), Contenido()],
     ));
   }
 }
@@ -196,7 +196,9 @@ class Botones extends StatelessWidget {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              //EVENTO REGISTRAR
+            },
             child: Text(
               'Registrar',
               style: TextStyle(

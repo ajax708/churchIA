@@ -160,10 +160,10 @@ class _HomeViewState extends State<HomeView> {
                 child: Container(
                   color: Colors.black,
                 )),
-            const Positioned(
+             Positioned(
               top: 920,
-              width: 412,
-              child: SecondClipPath(), //second_clip_path_widget
+              width: MediaQuery.of(context).size.width,
+              child: const SecondClipPath(), //second_clip_path_widget
             ),
             const Positioned(
               top: 1020,

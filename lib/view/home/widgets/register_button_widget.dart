@@ -17,7 +17,7 @@ class RegisterButton extends StatelessWidget {
         }),
       ),
       onPressed: () {
-        //homeLink.registerPage(context);
+        homeLink.registerPage(context);
       },
       child: const Text(
         'Regístrate',
