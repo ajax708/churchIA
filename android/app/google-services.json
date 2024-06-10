@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967970994529",
+    "project_id": "relevans2-bb0f6",
+    "storage_bucket": "relevans2-bb0f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967970994529:android:bc0b9607bf1bf417bead20",
+        "android_client_info": {
+          "package_name": "com.example.relevans_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHRVNymQjCJqSyrKvi2P7F5J26xScJlP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
