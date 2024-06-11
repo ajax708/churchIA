@@ -15,7 +15,7 @@ class _MoreActivitiesViewState extends State<MoreActivitiesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'RELEVANS',
+          "Church AI",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,

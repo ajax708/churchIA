@@ -17,7 +17,7 @@ class EventButton extends StatelessWidget {
         }),
       ),
       onPressed: () {
-        homeLink.eventPage(context);
+        homeLink.eventChurchPage(context);
       },
       child: const Row(
         children: [
@@ -29,7 +29,7 @@ class EventButton extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: 10, left: 25),
             child: Text(
-              'Calendario y eventos',
+              'Eventos',
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),

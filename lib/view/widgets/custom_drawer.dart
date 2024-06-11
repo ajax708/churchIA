@@ -18,7 +18,7 @@ class CustomDrawer extends StatelessWidget {
             accountName: Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(
-                "RELEVANS",
+                "Church AI",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
             ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:relevans_app/bussiness/event_links.dart';
 import 'package:relevans_app/utils/custom_icons.dart';
 
-class AppbarEvent extends StatelessWidget implements PreferredSizeWidget {
-  const AppbarEvent({Key? key});
+class AppbarEventImages extends StatelessWidget implements PreferredSizeWidget {
+  const AppbarEventImages({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class AppbarEvent extends StatelessWidget implements PreferredSizeWidget {
           builder: (context) => IconButton(
               onPressed: () {
                 EventLink eventLink = EventLink();
-                eventLink.homePage(context);
+                eventLink.eventChurchPage(context);
               },
               icon: const Padding(
                   padding: EdgeInsets.only(left: 8),

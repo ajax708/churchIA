@@ -76,7 +76,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: const Padding(
           padding: EdgeInsets.only(top: 30),
           child: Text(
-            'RELEVANS',
+            "Church AI",
             style: TextStyle(
                 color: Colors.black, fontSize: 25, fontWeight: FontWeight.bold),
           )),

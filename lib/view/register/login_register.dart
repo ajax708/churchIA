@@ -62,7 +62,7 @@ class LoginWidget extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // Lógica de inicio de sesión
+                  Navigator.of(context).pushNamed("/");
                 },
                 child: const Text(
                   'Iniciar Sesión',

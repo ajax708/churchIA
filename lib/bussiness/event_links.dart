@@ -5,7 +5,15 @@ class EventLink {
     Navigator.of(context).pushNamed("/");
   }
 
+  void eventChurchPage(BuildContext context) {
+    Navigator.of(context).pushNamed("/event_church");
+  }
+
   void alabanzaPage(BuildContext context) {
     Navigator.of(context).pushNamed("/alabanza");
+  }
+
+  void eventChurchImagesPage(BuildContext context) {
+    Navigator.of(context).pushNamed("/event_church_images");
   }
 }

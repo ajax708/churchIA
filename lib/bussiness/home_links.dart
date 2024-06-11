@@ -12,4 +12,7 @@ class HomeLink {
   void eventPage(BuildContext context) {
     Navigator.of(context).pushNamed("/event");
   }
+  void eventChurchPage(BuildContext context) {
+    Navigator.of(context).pushNamed("/event_church");
+  }
 }
