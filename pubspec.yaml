@@ -51,6 +51,10 @@ dependencies:
   image_gallery_saver: '^2.0.3'
   permission_handler: ^11.3.1
   device_info_plus: ^10.1.0
+  record: 4.4.4
+  just_audio: ^0.9.38
+  file_picker: ^8.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

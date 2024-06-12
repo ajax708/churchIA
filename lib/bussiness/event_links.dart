@@ -19,4 +19,7 @@ class EventLink {
   void eventAdminPage(BuildContext context) {
     Navigator.of(context).pushNamed("/event_admin");
   }
+  void eventRecordPage(BuildContext context) {
+    Navigator.of(context).pushNamed("/event_record");
+  }
 }

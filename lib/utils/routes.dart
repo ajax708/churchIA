@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:relevans_app/utils/FirebaseNotificationPush.dart';
 import 'package:relevans_app/utils/shared_pref.dart';
+import 'package:relevans_app/view/event/event_admin.dart';
 import 'package:relevans_app/view/event/event_church_images.dart';
 import 'package:relevans_app/view/event/event_church_view.dart';
+import 'package:relevans_app/view/event/event_load_audio.dart';
 
 //page imports
 import 'package:relevans_app/view/home/home_view.dart';
@@ -65,6 +67,8 @@ class _RoutesState extends State<Routes> {
         "/music_player": (context) => MusicPlayerView(),
         "/event_church": (context) => EventChurchView(),
         "/event_church_images": (context) => EventChurchImages(),
+        "/event_admin": (context) => EventChurchAdminView(),
+        "/event_record": (context) => AudioScreen(),
       },
     );
   }

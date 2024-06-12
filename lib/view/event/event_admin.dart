@@ -101,7 +101,7 @@ class _EventChurchAdminViewState extends State<EventChurchAdminView>{
         // Puedes navegar a la página del evento o mostrar detalles
         print('Evento seleccionado: ${event.toString()}');
         EventLink eventLink = EventLink();
-        eventLink.eventChurchImagesPage(context);
+        eventLink.eventRecordPage(context);
       },
       style: TextButton.styleFrom(padding: EdgeInsets.zero), // Elimina el padding para ajustar mejor el diseño
       child: Row(
