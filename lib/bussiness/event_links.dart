@@ -16,4 +16,7 @@ class EventLink {
   void eventChurchImagesPage(BuildContext context) {
     Navigator.of(context).pushNamed("/event_church_images");
   }
+  void eventAdminPage(BuildContext context) {
+    Navigator.of(context).pushNamed("/event_admin");
+  }
 }
