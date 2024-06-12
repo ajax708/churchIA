@@ -46,8 +46,7 @@ class AppbarEvent extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(bottom: 20, right: 20),
           child: IconButton(
               onPressed: () {
-                EventLink eventLink = EventLink();
-                eventLink.alabanzaPage(context);
+                Navigator.of(context).pop();
               },
               icon: const Icon(CustomIcons.music),
               iconSize: 38,
