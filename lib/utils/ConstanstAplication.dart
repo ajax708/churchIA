@@ -2,6 +2,7 @@ class ConstanstAplication {
   static const String appName = 'Flutter Ecommerce App';
   static const String appVersion = '1.0.0';
   static const String SERVER = 'https://rlvs.tesabiz.com';
+  static const String SERVER_NEST = 'http://localhost:3000';
   static final String SP_LAST_CONSUME = "SP_LAST_CONSUME";
   static final bool isSL = false;
   static final String IMEI = "IMEI";

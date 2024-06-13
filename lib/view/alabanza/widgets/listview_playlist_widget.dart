@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as flutter;
-import 'package:relevans_app/bussiness/PlaylistBusinessLogic.dart';
+import 'package:relevans_app/bll/PlaylistBusinessLogic.dart';
 import 'package:relevans_app/model/response/playlistDto2.dart';
 
 import '../../../bussiness/alabanza_links.dart';

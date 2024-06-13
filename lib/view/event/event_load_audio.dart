@@ -16,12 +16,14 @@ class _AudioScreenState extends State<AudioScreen> {
 
   String _selectedOption = 'Grabar';
   File? _selectedFile;
+  File? _recordedFile; // Placeholder for the recorded audio file
 
   void _startRecording() {
     setState(() {
       _isRecording = true;
     });
     // Lógica de inicio de grabación
+    // Almacena el archivo grabado en _recordedFile
   }
 
   void _stopRecording() {
@@ -44,11 +46,9 @@ class _AudioScreenState extends State<AudioScreen> {
     }
   }
 
-  Future<void> _uploadAudioFile() async {
-    if (_selectedFile == null) return;
-
+  Future<void> _uploadAudioFile(File audioFile) async {
     var request = http.MultipartRequest('POST', Uri.parse('https://example.com/upload'));
-    request.files.add(await http.MultipartFile.fromPath('audio', _selectedFile!.path));
+    request.files.add(await http.MultipartFile.fromPath('audio', audioFile.path));
 
     var response = await request.send();
 
@@ -100,94 +100,103 @@ class _AudioScreenState extends State<AudioScreen> {
 
   Widget _buildRecordingView() {
     return Center(
-      child: Column(
-        children: [
-          Icon(
-            _isRecording ? Icons.mic : Icons.mic_none,
-            size: 100,
-            color: _isRecording ? Colors.red : Colors.blue,
-          ),
-          const SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: _isRecording ? null : _startRecording,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                ),
-                child: const Text('Record'),
-              ),
-              const SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: _isRecording ? _stopRecording : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                ),
-                child: const Text('Stop'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: !_isRecording ? _playRecording : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        child:Column(
+          children: [
+            Icon(
+              _isRecording ? Icons.mic : Icons.mic_none,
+              size: 100,
+              color: _isRecording ? Colors.red : Colors.blue,
             ),
-            child: const Text('Play'),
-          ),
-          Slider(
-            value: _currentPosition,
-            max: _totalDuration,
-            onChanged: (value) {
-              setState(() {
-                _currentPosition = value;
-              });
-              // Update audio player position here
-            },
-          ),
-        ],
-      ),
+            const SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _isRecording ? null : _startRecording,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  ),
+                  child: const Text('Record'),
+                ),
+                const SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: _isRecording ? _stopRecording : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  ),
+                  child: const Text('Stop'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: !_isRecording ? _playRecording : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+              child: const Text('Play'),
+            ),
+            Slider(
+              value: _currentPosition,
+              max: _totalDuration,
+              onChanged: (value) {
+                setState(() {
+                  _currentPosition = value;
+                });
+                // Update audio player position here
+              },
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _recordedFile != null ? () => _uploadAudioFile(_recordedFile!) : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+              child: const Text('Subir Grabación'),
+            ),
+          ],
+        ),
     );
   }
 
   Widget _buildUploadView() {
     return Center(
-      child: Column(
-        children: [
-          const Icon(
-            Icons.file_upload,
-            size: 100,
-            color: Colors.blue,
-          ),
-          const SizedBox(height: 40),
-          ElevatedButton(
-            onPressed: _pickAudioFile,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        child: Column(
+          children: [
+            const Icon(
+              Icons.file_upload,
+              size: 100,
+              color: Colors.blue,
             ),
-            child: const Text('Seleccionar Audio'),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _selectedFile != null ? _uploadAudioFile : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: _pickAudioFile,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+              child: const Text('Seleccionar Audio'),
             ),
-            child: const Text('Subir Audio'),
-          ),
-          if (_selectedFile != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Text('Archivo seleccionado: ${_selectedFile!.path.split('/').last}'),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _selectedFile != null ? () => _uploadAudioFile(_selectedFile!) : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+              child: const Text('Subir Audio'),
             ),
-        ],
-      ),
+            if (_selectedFile != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text('Archivo seleccionado: ${_selectedFile!.path.split('/').last}'),
+              ),
+          ],
+        ),
     );
   }
 }
