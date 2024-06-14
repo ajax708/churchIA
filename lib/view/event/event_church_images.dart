@@ -10,6 +10,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:relevans_app/model/Dto/Eventos.dto.dart';
+import 'package:relevans_app/utils/ConstanstAplication.dart';
 import 'package:relevans_app/view/alabanza/widgets/first_clip_path_widget.dart';
 import 'package:relevans_app/view/event/widgets/appbar_event_images.dart';
 import 'package:relevans_app/view/widgets/custom_navigationbar.dart';
@@ -26,31 +27,38 @@ class EventChurchImages extends StatefulWidget {
 class _EventChurchImagesState extends State<EventChurchImages> {
 
   int currentPage = 3;
-  EventDto? _eventDto = EventDto(id: 1, title: "Test 1", description: "description", date: "12/12/2021",
-      images: [
-        "https://picsum.photos/200/300",
-        "https://picsum.photos/200/300",
-        "https://picsum.photos/200/300",
-        "https://picsum.photos/200/300",
-      ]
-  );
+  EventDto? _eventDto;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      initializeEventDto();
+    });
+  }
+
+  void initializeEventDto() {
+    final arguments = ModalRoute.of(context)?.settings.arguments;
+    if (arguments is EventDto) {
+      setState(() {
+        _eventDto = arguments;
+      });
+    } else {
+      // Manejar el caso donde no se proporcionan argumentos válidos de EventDto
+      developer.log('Invalid arguments for EventDto');
+      // Puedes manejar esto mostrando un mensaje de error o navegando atrás, etc.
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:const AppbarEventImages(),
+      appBar: const AppbarEventImages(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            //const FirstClipPath(),
-            titleEvent(_eventDto!.title),
-            listImages(_eventDto!.images),
+            titleEvent(_eventDto?.nombre ?? ''),
+            listImages(_eventDto?.images ?? []),
           ],
         ),
       ),
@@ -82,10 +90,10 @@ class _EventChurchImagesState extends State<EventChurchImages> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Cantidad de columnas
-            crossAxisSpacing: 10.0, // Espaciado entre columnas
-            mainAxisSpacing: 10.0, // Espaciado entre filas
-            childAspectRatio: 3 / 2, // Relación de aspecto para las imágenes
+            crossAxisCount: 2,
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            childAspectRatio: 3 / 2,
           ),
           itemCount: images.length,
           itemBuilder: (context, index) => Card(
@@ -95,7 +103,7 @@ class _EventChurchImagesState extends State<EventChurchImages> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
-              child: _imageContainerVisualizer(images[index], index),
+              child: _imageContainerVisualizer(ConstanstAplication.SERVER_NEST + "/"+ images[index], index),
             ),
           ),
         ),
@@ -141,29 +149,25 @@ class _EventChurchImagesState extends State<EventChurchImages> {
     Uint8List bytes;
     String extension;
 
-
-    if(storagePermission() == false){
+    if (!await storagePermission()) {
       return;
     }
 
-
     if (isBase64) {
-      // Decodificar imagen base64
       bytes = base64Decode(image.split(',')[1]);
       extension = _getImageExtension(image);
     } else {
-      // Descargar imagen desde la red
-      final response = await http.get(Uri.parse(image));
+      String uriImage = image;
+      final response = await http.get(Uri.parse(uriImage));
       if (response.statusCode == 200) {
         bytes = response.bodyBytes;
-        extension = _getImageExtensionFromUrl(image);
+        extension = _getImageExtensionFromUrl(uriImage);
       } else {
         developer.log('Error downloading image: ${response.statusCode}');
         return;
       }
     }
 
-    // Guardar imagen en almacenamiento externo
     final directory = await getExternalStorageDirectory();
     if (directory != null) {
       final path = '${directory.path}/image_${DateTime.now().millisecondsSinceEpoch}.$extension';
@@ -188,19 +192,19 @@ class _EventChurchImagesState extends State<EventChurchImages> {
   String _getImageExtensionFromUrl(String url) {
     return url.split('.').last.split('?')[0];
   }
+
   Future<bool> storagePermission() async {
-    final DeviceInfoPlugin info = DeviceInfoPlugin(); // import 'package:device_info_plus/device_info_plus.dart';
+    final DeviceInfoPlugin info = DeviceInfoPlugin();
     final AndroidDeviceInfo androidInfo = await info.androidInfo;
     debugPrint('releaseVersion : ${androidInfo.version.release}');
     final int androidVersion = int.parse(androidInfo.version.release);
+
     bool havePermission = false;
 
     if (androidVersion >= 13) {
       final request = await [
-        Permission.videos,
         Permission.photos,
-        //..... as needed
-      ].request(); //import 'package:permission_handler/permission_handler.dart';
+      ].request();
 
       havePermission = request.values.every((status) => status == PermissionStatus.granted);
     } else {
@@ -209,11 +213,9 @@ class _EventChurchImagesState extends State<EventChurchImages> {
     }
 
     if (!havePermission) {
-      // if no permission then open app-setting
       await openAppSettings();
     }
 
     return havePermission;
   }
-
 }

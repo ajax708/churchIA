@@ -1,7 +1,11 @@
+
 import 'package:flutter/material.dart';
+import 'package:relevans_app/bll/auth.bll.dart';
 
 class SignUpForm extends StatelessWidget {
-  const SignUpForm({super.key});
+  SignUpForm({super.key});
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,7 @@ class SignUpForm extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     labelText: 'Correo Electrónico',
                     border: OutlineInputBorder(
@@ -58,6 +63,7 @@ class SignUpForm extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: passwordController,
                   decoration: InputDecoration(
                     labelText: 'Contraseña',
                     border: OutlineInputBorder(
@@ -90,7 +96,7 @@ class SignUpForm extends StatelessWidget {
                     const Text("¿Ya tienes cuenta?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.of(context).pushNamed("/login");
                       },
                       child: const Text('Inicia Sesión'),
                     ),
@@ -103,5 +109,26 @@ class SignUpForm extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _login(BuildContext context, String email, String password) async {
+    AuthBll authBll = AuthBll();
+    if(email.isEmpty || password.isEmpty){
+      final snackBar = SnackBar(content: Text('Por favor, ingrese su correo y contraseña'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+    try {
+      var token = await authBll.login(email, password);
+      print('Token: $token');
+      if (token != null && token.isNotEmpty) {
+        Navigator.of(context).pushNamed("/");
+      }else{
+        final snackBar = SnackBar(content: Text('Credenciales inválidas'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

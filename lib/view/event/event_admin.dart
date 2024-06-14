@@ -1,6 +1,9 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:relevans_app/bll/EventBll.dart';
 import 'package:relevans_app/bussiness/event_links.dart';
 import 'package:relevans_app/model/Dto/Eventos.dto.dart';
 import 'package:relevans_app/view/alabanza/widgets/first_clip_path_widget.dart';
@@ -16,15 +19,46 @@ class EventChurchAdminView extends StatefulWidget{
 
 class _EventChurchAdminViewState extends State<EventChurchAdminView>{
   int currentPage = 2;
-  final List<EventDto> _listaEventos = [
-    EventDto(id: 1, title: 'Evento 1' , description: 'Iglesia', date: "12/12/2021"),
-    EventDto(id: 2, title: 'Evento 2' , description: 'Iglesia', date: "12/12/2021"),
-    EventDto(id: 3, title: 'Evento 3' , description: 'Iglesia', date: "12/12/2021"),
-  ];
+  late List<EventDto> _listaEventos = [];
   @override
   void initState() {
 
     super.initState();
+    _loadEvents();
+  }
+
+  void _loadEvents() async {
+    EventBll eventBll = EventBll();
+    try {
+      _listaEventos = await eventBll.getEvents();
+      setState(() {}); // Actualizar la UI con los nuevos datos
+    } on HttpException catch (e) {
+      if (e.message == 'Unauthorized' || e.message == 'Forbidden') {
+        //showmessage diciendo sesion expirada
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sesión expirada. Por favor, inicie sesión de nuevo.'),
+            duration: Duration(seconds: 3), // Duración del mensaje
+          ),
+        );
+
+        // Esperar un poco antes de navegar para que el usuario vea el mensaje
+        await Future.delayed(const Duration(seconds: 3));
+
+        // Navegar a la pantalla de inicio de sesión
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        // Mostrar un mensaje de error genérico o manejar otros errores
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load events')),
+        );
+      }
+    } catch (e) {
+      // Manejar cualquier otro tipo de excepción
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An unexpected error occurred')),
+      );
+    }
   }
 
   @override
@@ -101,7 +135,7 @@ class _EventChurchAdminViewState extends State<EventChurchAdminView>{
         // Puedes navegar a la página del evento o mostrar detalles
         print('Evento seleccionado: ${event.toString()}');
         EventLink eventLink = EventLink();
-        eventLink.eventRecordPage(context);
+        eventLink.eventLoadAudio(context, event);
       },
       style: TextButton.styleFrom(padding: EdgeInsets.zero), // Elimina el padding para ajustar mejor el diseño
       child: Row(
@@ -128,7 +162,7 @@ class _EventChurchAdminViewState extends State<EventChurchAdminView>{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event.title,
+                    event.nombre,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 22,
@@ -138,7 +172,7 @@ class _EventChurchAdminViewState extends State<EventChurchAdminView>{
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    event.date,
+                    event.lugar,
                     style: const TextStyle(
                       color: Color.fromARGB(255, 64, 64, 64),
                       fontSize: 16,

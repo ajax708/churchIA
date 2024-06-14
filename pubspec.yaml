@@ -54,6 +54,8 @@ dependencies:
   record: 4.4.4
   just_audio: ^0.9.38
   file_picker: ^8.0.5
+  mime: ^1.0.5
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_test:

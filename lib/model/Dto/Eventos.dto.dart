@@ -1,36 +1,41 @@
 class EventDto {
+
   EventDto({
     required this.id,
-    required this.title,
-    required this.description,
-    required this.date,
+    required this.nombre,
+    required this.fecha,
+    required this.lugar,
     this.images = const [],
   });
 
-  int id;
-  String title;
-  String description;
-  String date;
+  String id;
+  String nombre;
+  String fecha;
+  String lugar;
   List<String> images = [];
 
-  factory EventDto.fromJson(Map<String, dynamic> json) => EventDto(
-        id: json["id"],
-        title: json["title"],
-        description: json["description"],
-        date: json["date"],
-        images: json["image"],
-      );
+  factory EventDto.fromJson(Map<String, dynamic> json) {
+    return EventDto(
+      id: json['id'] ?? '',
+      nombre: json['nombre'] ?? '',
+      fecha: json['fecha'] ?? '',
+      lugar: json['lugar'] ?? '',
+      images: json['images'] != null
+          ? List<String>.from(json['images'].map((image) => image.toString()))
+          : [],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "description": description,
-        "date": date,
-        "image": images.toList() ?? [],
+    "id": id,
+    "nombre": nombre,
+    "fecha": fecha,
+    "lugar": lugar,
+    "images": List<dynamic>.from(images.map((x) => x)),
   };
 
   @override
   String toString() {
-    return 'EventDto{id: $id, title: $title, description: $description, date: $date, images: $images}';
+    return 'EventDto{id: $id, nombre: $nombre, fecha: $fecha, lugar: $lugar, images: $images}';
   }
 }

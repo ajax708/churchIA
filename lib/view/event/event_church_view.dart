@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:relevans_app/bll/EventBll.dart';
 import 'package:relevans_app/bussiness/event_links.dart';
 import 'package:relevans_app/model/Dto/Eventos.dto.dart';
 import 'package:relevans_app/view/alabanza/widgets/first_clip_path_widget.dart';
@@ -17,15 +18,27 @@ class EventChurchView extends StatefulWidget{
 
 class _EvemntChurchViewState extends State<EventChurchView>{
   int currentPage = 2;
-  final List<EventDto> _listaEventos = [
-    EventDto(id: 1, title: 'Evento 1' , description: 'Iglesia', date: "12/12/2021"),
-    EventDto(id: 2, title: 'Evento 2' , description: 'Iglesia', date: "12/12/2021"),
-    EventDto(id: 3, title: 'Evento 3' , description: 'Iglesia', date: "12/12/2021"),
-  ];
+  late List<EventDto> _listaEventos = [];
   @override
   void initState() {
 
     super.initState();
+    _loadEvents();
+  }
+
+  // Método para cargar los eventos
+  _loadEvents() async {
+    try {
+      EventBll eventBll = EventBll();
+      List<EventDto> eventos = await eventBll.getEventsLocal();
+
+      setState(() {
+        _listaEventos = eventos; // Actualiza la lista de eventos
+      });
+    } catch (e) {
+      print('Error al cargar eventos: $e');
+      // Puedes manejar el error aquí, por ejemplo, mostrar un mensaje al usuario
+    }
   }
 
   @override
@@ -98,11 +111,7 @@ class _EvemntChurchViewState extends State<EventChurchView>{
   Widget _eventButton(EventDto event, int index) {
     return TextButton(
       onPressed: () {
-        // Lógica para manejar el evento
-        // Puedes navegar a la página del evento o mostrar detalles
-        print('Evento seleccionado: ${event.toString()}');
-        EventLink eventLink = EventLink();
-        eventLink.eventChurchImagesPage(context);
+        _viewImagesToEvent(event);
       },
       style: TextButton.styleFrom(padding: EdgeInsets.zero), // Elimina el padding para ajustar mejor el diseño
       child: Row(
@@ -129,7 +138,7 @@ class _EvemntChurchViewState extends State<EventChurchView>{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event.title,
+                    event.nombre,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 22,
@@ -139,7 +148,7 @@ class _EvemntChurchViewState extends State<EventChurchView>{
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    event.date,
+                    event.lugar,
                     style: const TextStyle(
                       color: Color.fromARGB(255, 64, 64, 64),
                       fontSize: 16,
@@ -153,5 +162,26 @@ class _EvemntChurchViewState extends State<EventChurchView>{
         ],
       ),
     );
+  }
+
+  _viewImagesToEvent(EventDto event)async{
+    print('Evento seleccionado: ${event.toString()}');
+
+    try {
+      EventBll eventBll = EventBll();
+      EventDto _eventDto = await eventBll.getEventById(event.id);
+
+      print('Evento consumido: ${_eventDto.toString()}');
+
+      if (_eventDto != null) {
+        EventLink eventLink = EventLink();
+        eventLink.eventChurchImagesPage(context, _eventDto);
+      } else {
+        throw Exception('Evento no encontrado');
+      }
+    } catch (e) {
+      print('Error al cargar el evento: $e');
+      // Manejar el error apropiadamente, por ejemplo, mostrar un diálogo
+    }
   }
 }
