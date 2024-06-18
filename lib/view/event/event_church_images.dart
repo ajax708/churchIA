@@ -103,7 +103,7 @@ class _EventChurchImagesState extends State<EventChurchImages> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
-              child: _imageContainerVisualizer(ConstanstAplication.SERVER_NEST + "/"+ images[index], index),
+              child: _imageContainerVisualizer(images[index], index),
             ),
           ),
         ),
